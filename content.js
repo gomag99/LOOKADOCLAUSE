@@ -11,13 +11,18 @@ const SELECTORS = [
   '[aria-label*="dismiss" i]',
   '[title*="close" i]',
   '[title*="閉じる"]',
-  '[class*="close" i]',
-  '[id*="close" i]',
-  '[class*="dismiss" i]',
+  
 ];
 const X_CHARS = ['×', '✕', '✖', '✗', 'X', 'x', '閉じる'];
 const MAX_SIZE = 150;
+// close / dismiss が「単語として」入ってるかチェック
+// OK: ad-close, close-btn, closeBtn, modalClose
+// NG: closed, closest, enclose, closet
+const CLOSE_WORD = /(?:^|[-_])(?:close|dismiss)(?![a-z])|(?<=[a-z])(?:Close|Dismiss)(?![a-z])/;
 
+function hasCloseName(el) {
+  return [...el.classList, el.id].some((name) => CLOSE_WORD.test(name));
+}
 // ===== 指と紙吹雪を置くレイヤーを1枚だけ作る =====
 const layer = document.createElement('div');
 layer.id = 'cbh-layer';
@@ -133,6 +138,9 @@ if (window === window.top) {
 function scan(root) {
   root.querySelectorAll(SELECTORS.join(',')).forEach(highlight);
 
+    // クラス名・IDは一旦ゆるく拾ってから、正規表現でちゃんと選別
+  root.querySelectorAll('[class*="close" i], [id*="close" i], [class*="dismiss" i]')
+    .forEach((el) => { if (hasCloseName(el)) highlight(el); });
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   let node;
   while ((node = walker.nextNode())) {

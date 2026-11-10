@@ -1,0 +1,45 @@
+/* ===== 閉じるボタン本体 ===== */
+.cbh-highlight {
+  outline: 4px solid #ff0040 !important;
+  outline-offset: 2px !important;
+  animation: cbh-pulse 0.6s ease-in-out infinite !important;
+}
+
+@keyframes cbh-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(255, 0, 64, 0.5), 0 0 20px 6px #ffd700; }
+  50%      { box-shadow: 0 0 0 12px rgba(255, 0, 64, 0.2), 0 0 40px 14px #ff00d4; }
+}
+
+/* ===== 指と紙吹雪を置くレイヤー（画面全体を覆うけどクリックは素通り） ===== */
+#cbh-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2147483647;
+  overflow: hidden;
+}
+
+/* ===== 指 ===== */
+.cbh-finger {
+  position: absolute;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.cbh-finger span {
+  display: inline-block;
+  animation: cbh-poke 0.35s ease-in-out infinite alternate;
+}
+
+@keyframes cbh-poke {
+  from { transform: translateX(-10px); }
+  to   { transform: translateX(6px); }
+}
+
+/* ===== 紙吹雪 ===== */
+.cbh-confetti {
+  position: absolute;
+  width: 10px;
+  height: 14px;
+  border-radius: 2px;
+}
